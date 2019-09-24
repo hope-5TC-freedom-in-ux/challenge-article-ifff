@@ -59,11 +59,14 @@
       </b-row>
       <b-row align-h="center" v-else>
         <b-col cols="8">
-          <privacy>
+          <privacy :step="step">
           </privacy>
         </b-col>
         <b-col cols="2">
-          <b-row align-h="center" v-if="privacy" align-v="center" class="side-frame">
+          <b-row align-h="center" align-v="center" class="side-frame">
+            Accept and go back to the paper
+          </b-row>
+          <b-row align-h="center" @click="step=1" align-v="center" class="side-frame">
             PRIVACY SETTINGS
           </b-row>
         </b-col>
@@ -99,6 +102,7 @@ export default{
   data(){
     return{
       privacy:false,
+      step:0,
       rgpdModalId:"rgpd_modal"
     }
   },
