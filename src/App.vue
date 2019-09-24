@@ -19,7 +19,7 @@
       <b-tab>
         <b-row class="step" align-h="center" align-v="center">
           <b-col>
-            <science-portal></science-portal>
+            <science-portal :active="portal"></science-portal>
           </b-col>
         </b-row>
       </b-tab>
@@ -30,7 +30,6 @@
 <script>
 import UiButton from "./components/uiComponents/ui-button.vue"
 import SciencePortal from "./components/SciencePortal.vue"
-import Rgpd from "./components/Rgpd.vue"
 export default {
   name: 'app',
   data(){
@@ -43,8 +42,17 @@ export default {
       this.step+=1;
     }
   },
+  computed:{
+    portal(){
+      if(this.step==1){
+        return true
+      }else{
+        return false
+      }
+    }
+  },
   components: {
-    UiButton,Rgpd,SciencePortal
+    UiButton,SciencePortal
   }
 }
 </script>

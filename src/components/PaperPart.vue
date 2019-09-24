@@ -1,6 +1,6 @@
 <template>
   <b-col class="cell-outer">
-
+    JE SUIS UN PAPER
   </b-col>
 </template>
 
