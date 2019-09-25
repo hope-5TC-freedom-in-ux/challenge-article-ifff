@@ -93,3 +93,12 @@
 .dropdown.btn-group.b-dropdown{
   border:0px;
 }
+
+
+.modal-content{
+  background-color:var(--dark-color);
+  color:var(--light-color);
+  border-radius:0;
+  border:1px solid var(--light-color);
+  font-weight:300;
+}

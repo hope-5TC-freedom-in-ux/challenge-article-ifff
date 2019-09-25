@@ -61,6 +61,10 @@ export default {
   transition:all ease-in 300ms;
 }
 
+.myInput{
+  font-size:10px !important;
+}
+
 .form-control:hover{
   border-color:var(--light-color) !important;
   transition:all ease-in 300ms;

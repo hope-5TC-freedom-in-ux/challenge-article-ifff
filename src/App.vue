@@ -82,6 +82,10 @@ a{
   font-weight:500 !important;
 }
 
+a.suddle{
+  color:var(--)
+}
+
 .quote{
   font-style:italic;
 }

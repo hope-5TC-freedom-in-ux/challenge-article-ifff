@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-col class="outer">
-      <b-row align-h="center"class="title banner">
+      <b-row align-h="center" class="title banner">
         <b-col cols="10" class="website_title">
           <p>
             <b>IFFF</b> Xplore<sup>®</sup>
@@ -57,17 +57,31 @@
           </b-row>
         </b-col>
       </b-row>
+
       <b-row align-h="center" v-else>
         <b-col cols="8">
-          <privacy :step="step">
+          <privacy :step="step" @manageSettings="manageSettings">
           </privacy>
         </b-col>
         <b-col cols="2">
           <b-row align-h="center" align-v="center" class="side-frame">
             Accept and go back to the paper
           </b-row>
-          <b-row align-h="center" @click="step=1" align-v="center" class="side-frame">
-            PRIVACY SETTINGS
+
+          <b-row align-h="center" align-v="center" class="side-frame secondary">
+            <b>Business Policies & Information </b>
+            <ul class="list-unstyled mt-2">
+              <li v-for="link in fake_list">
+                <a href="#">
+                  > {{link}}
+                </a>
+              </li>
+            </ul>
+          </b-row>
+
+          <b-row align-h="center" align-v="center" class="side-frame secondary">
+            <b>IFFF Privacy Portal</b>
+            <a href="#" @click="step=1">> Manage your privacy</a>
           </b-row>
         </b-col>
       </b-row>
@@ -95,12 +109,30 @@ export default{
       console.log("Ask for privacy")
       this.privacy=true;
     },
+    manageSettings(){
+      console.log("Ask for managing settings")
+      this.step=2;
+    },
     accept(){
       console.log("Accept")
     }
   },
   data(){
     return{
+      fake_list:[
+        "Pricing Policy",
+        "Browser Policy",
+        "Export Restrictions",
+        "Payment and Order Methods",
+        "Returns Policy",
+        "Shipping Information",
+        "Tax Informaiton",
+        "Terms & Conditions",
+        "Nondiscrimination Policy",
+        "Privacy Policy",
+        "Principles of Business Conduct and Conflict of Interest",
+        "IFFF Data Access and Use Policy "
+      ],
       privacy:false,
       step:0,
       rgpdModalId:"rgpd_modal"
@@ -140,6 +172,17 @@ export default{
   color:var(--dark-color);
   font-weight: 400;
   margin-bottom:0.5rem;
+}
+
+.side-frame.secondary{
+  font-size: 90%;
+  padding:1rem;
+  height:auto;
+  background-color: var(--dark-color);
+  color:var(--light-color);
+  font-weight:300;
+  border:1px solid var(--light-color);
+  text-align: justify;
 }
 
 .outer{

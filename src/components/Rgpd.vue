@@ -1,20 +1,26 @@
 <template>
   <b-modal no-close-on-backdrop no-close-on-esc hide-header hide-footer :id="id" title="BootstrapVue">
     <p>
-      IEEE websites place cookies on your device to give you the best user experience.
+      IFFF websites place cookies on your device to give you the best user experience.
       By using our websites, you agree to the placement of these cookies.
       To learn more, read our <a href="#" @click="seeMore">Privacy Policy</a>
     </p>
 
-    <b-button class="mt-2" variant="outline-primary" block @click="hideModal">Toggle Me</b-button>
+    <ui-button class="mt-2" variant="outline-primary" block @clicked="hideModal">Accept</ui-button>
   </b-modal>
 </template>
 
 <script>
+
+import UiButton from "./uiComponents/ui-button.vue"
+
 export default{
   name:'rgpd',
   props:{
-    id:String,
+    id:String
+  },
+  components:{
+    UiButton
   },
   methods:{
     seeMore(){
