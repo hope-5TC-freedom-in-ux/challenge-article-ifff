@@ -55,6 +55,293 @@ var UiButton = {
   `
 }
 
+var Rgpd={
+  props:{
+    id:String
+  },
+  components:{
+    UiButton
+  },
+  methods:{
+    seeMore(){
+      this.$emit("seeMore");
+      this.$bvModal.hide(this.id)
+    },
+    hideModal(){
+      this.$emit("accept");
+      this.$bvModal.hide(this.id)
+    }
+  },
+  template:`
+  <b-modal no-close-on-backdrop no-close-on-esc hide-header hide-footer :id="id" title="BootstrapVue">
+  <p>
+  IFFF websites place cookies on your device to give you the best user experience.
+  By using our websites, you agree to the placement of these cookies.
+  To learn more, read our <a href="#" @click="seeMore">Privacy Policy</a>
+  </p>
+
+  <ui-button class="mt-2" variant="outline-primary" block @clicked="hideModal">Accept</ui-button>
+  </b-modal>
+  `
+}
+
+var Privacy={
+  props:{
+    step:{
+      type:Number,
+      default:0
+    }
+  },
+  components:{
+    UiInput
+  },
+  data(){
+    return{
+      info_collect:"",
+    }
+  },
+  methods:{
+    portalJump(){
+      this.$emit("manageSettings");
+    }
+  },
+  mounted(){
+    $.ajax({
+      url: "info_collect.txt",
+      success: (res)=>{
+        console.log(res)
+        this.info_collect = res
+      },
+      dataType: 'html'
+    });
+  },
+  template:`
+  <b-tabs small pills v-model="step">
+  <b-tab>
+  <b-col class="cell-outer-privacy">
+  <div role="tablist">
+  <b-card no-body class="mb-1">
+  <b-card-header header-tag="header" class="p-1" role="tab">
+  <b-button block v-b-toggle.accordion-1>Quelles données collectons nous ?</b-button>
+  </b-card-header>
+  <b-collapse id="accordion-1" visible accordion="my-accordion" role="tabpanel">
+  <b-card-body>
+  <b-card-text>{{ info_collect }}</b-card-text>
+  </b-card-body>
+  </b-collapse>
+  </b-card>
+  </div>
+  </b-col>
+  </b-tab>
+  <b-tab>
+  <b-col class="privacy-2">
+  <p>
+  <span class="section-title">
+  IFFF Privacy Portal
+  </span>
+  </p>
+  <br />
+  <p>
+  ▸The IFFF Privacy Portal is the central location for privacy settings and will allow members
+  and customers to manage communication preferences and view the Policies and Terms & Conditions
+  that have been consented to.
+  </p>
+  <br/>
+  <p>
+  ▸IFFF Members, Society Affiliates and Standards Association Members access the <a href="#">Privacy Portal</a>
+  or <a href="#">My Account</a> on <a href="#">www.IFFF.org</a>
+  </p>
+  <br  />
+  <p>
+  ▸Users without an IFFF Web Account can access the <a href="#" @click="portalJump">Privacy Portal</a>
+  and enter their email address to view selected preferences and policies.
+  </p>
+  </b-col>
+  </b-tab>
+
+  <b-tab>
+  <b-col class="privacy-2">
+  <p>
+  <span class="section-title">
+  Communication Preferences Help
+  </span>
+  </p>
+  <p>
+  To access your preferences, please enter your email address and submit.
+  </p>
+  Email Address
+  <ui-input></ui-input>
+  </b-col>
+  </b-tab>
+  </b-tabs>
+  `
+}
+
+var Downloadpdf={
+  props:{
+    id:String
+  },
+  data(){
+    return{
+      error:false,
+    }
+  },
+  components:{
+    UiButton,UiInput
+  },
+  methods:{
+    validateMail(input){
+      if(input.includes('@')){
+        this.error=false;
+        console.log("Validating ",input)
+        this.$emit("mail_typed",input)
+      }else{
+        this.error=true;
+      }
+    },
+    seeMore(){
+      this.$emit("seeMore");
+      this.$bvModal.hide(this.id)
+    },
+    hideModal(){
+      this.$emit("accept");
+      this.$bvModal.hide(this.id)
+    }
+  },
+  template:`
+  <b-modal no-close-on-backdrop no-close-on-esc hide-header hide-footer :id="id" title="BootstrapVue">
+  <p>Pour pouvoir lire cet article merci de vous inscrire à notre newsletter</p>
+  <p v-if="error">Veuillez rentrer une adresse valide</p>
+  <ui-input length="6" @validate="validateMail"></ui-input>
+  <ui-button class="mt-2" variant="outline-primary" block @clicked="hideModal">Accept</ui-button>
+  </b-modal>
+  `
+}
+
+var PaperPart={
+  data(){
+    return{
+      article:null,
+      dlModal:"dl_modal"
+    }
+  },
+  components:{
+    Downloadpdf
+  },
+  methods:{
+    showArticle(){
+      this.$bvModal.hide(this.dlModal)
+    },
+    downloadPDF(){
+      console.log("DownloadPDF")
+      this.$bvModal.show(this.dlModal)
+    },
+    fetchArticle(){
+      $.ajax({
+        url: "article.json",
+        success: (res)=>{
+          console.log(res)
+          this.article = res
+        },
+        dataType:'json'
+      });
+    }
+  },
+  mounted(){
+    console.log("mounted");
+    this.fetchArticle();
+  },
+  template:`
+  <b-col class="cell-outer">
+    <b-row v-if="article">
+      <b-col class="text-left">
+        <p>
+          <h3>
+            {{article.name}}
+          </h3>
+          <br />
+          Publisher: {{article.publisher}}
+        </p>
+      </b-col>
+    </b-row>
+
+    <b-row v-if="article">
+      <b-col class="text-left">
+        <b-badge variant="dark" class="">{{article.authors.length}} Author(s)</b-badge>
+        <template v-for="author in article.authors">
+          {{author}} ;
+        </template>
+      </b-col>
+    </b-row>
+
+    <b-row align-h="end">
+      <b-col cols="auto">
+        <b-badge variant="dark" class="clickable" @click="downloadPDF">PDF</b-badge> &nbsp
+        <b-badge variant="dark">Citations</b-badge> &nbsp
+        <b-badge variant="dark">References</b-badge> &nbsp
+        <b-badge variant="dark">Mail</b-badge> &nbsp
+      </b-col>
+    </b-row>
+    <b-row class="article_preview text-left" v-if="article">
+      <b-col cols="3">
+        <h5>
+          Document Sections
+        </h5>
+        <p v-for="section in article.sections">
+          {{section}}
+        </p>
+      </b-col>
+      <b-col cols="9">
+        <b-row>
+          <b-col>
+            <h5>
+              Abstract
+            </h5>
+            <p>
+              {{article.abstract}}
+            </p>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col cols="12">
+            <p>
+              <b>Published In : </b>{{article.published_in}}
+            </p>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col cols="6">
+            <p>
+              <b>Date of Conference : </b>{{article.date_conf}}
+            </p>
+            <p>
+              <b>Date added to IFFF <it>Xplore</it> : </b>{{article.date_added_ifff}}
+            </p>
+          </b-col>
+          <b-col cols="6">
+            <p>
+              <b>INSPECT Accession Number : </b>{{article.INSPEC_Accession_Number}}
+            </p>
+            <p>
+              <b>DOI : </b>{{article.DOI}}
+            </p>
+            <p>
+              <b>Publisher : </b>{{article.Publisher}}
+            </p>
+            <p>
+              <b>Conference location : </b>{{article.Conference_Loc}}
+            </p>
+          </b-col>
+        </b-row>
+
+      </b-col>
+    </b-row>
+
+    <downloadpdf :id="dlModal" @mail_typed="showArticle"></downloadpdf>
+  </b-col>
+  `
+}
+
 var SciencePortal={
   props:{
     active:Boolean
@@ -63,6 +350,10 @@ var SciencePortal={
     PaperPart,Rgpd, Privacy
   },
   methods:{
+    displayPaper(){
+      console.log("Display paper")
+      this.privacy=false;
+    },
     openPrivacyPage(){
       console.log("Ask for privacy")
       this.privacy=true;
@@ -169,7 +460,7 @@ var SciencePortal={
   </privacy>
   </b-col>
   <b-col cols="2">
-  <b-row align-h="center" align-v="center" class="side-frame">
+  <b-row align-h="center" align-v="center" class="side-frame selectable" @click="displayPaper">
   Accept and go back to the paper
   </b-row>
 
@@ -196,106 +487,7 @@ var SciencePortal={
   `
 }
 
-var PaperPart={
-  template:`
-  <b-col class="cell-outer">
-  JE SUIS UN PAPER
-  </b-col>
-  `
-}
 
-var Rgpd={
-  props:{
-    id:String
-  },
-  components:{
-    UiButton
-  },
-  methods:{
-    seeMore(){
-      this.$emit("seeMore");
-      this.$bvModal.hide(this.id)
-    },
-    hideModal(){
-      this.$emit("accept");
-      this.$bvModal.hide(this.id)
-    }
-  },
-  template:`
-  <b-modal no-close-on-backdrop no-close-on-esc hide-header hide-footer :id="id" title="BootstrapVue">
-  <p>
-  IFFF websites place cookies on your device to give you the best user experience.
-  By using our websites, you agree to the placement of these cookies.
-  To learn more, read our <a href="#" @click="seeMore">Privacy Policy</a>
-  </p>
-
-  <ui-button class="mt-2" variant="outline-primary" block @clicked="hideModal">Accept</ui-button>
-  </b-modal>
-  `
-}
-
-var Privacy={
-  template:`
-  <b-tabs small pills v-model="step">
-  <b-tab>
-  <b-col class="cell-outer">
-  <div role="tablist">
-  <b-card no-body class="mb-1">
-  <b-card-header header-tag="header" class="p-1" role="tab">
-  <b-button block v-b-toggle.accordion-1>Quelles données collectons nous ?</b-button>
-  </b-card-header>
-  <b-collapse id="accordion-1" visible accordion="my-accordion" role="tabpanel">
-  <b-card-body>
-  <b-card-text>{{ info_collect }}</b-card-text>
-  </b-card-body>
-  </b-collapse>
-  </b-card>
-  </div>
-  </b-col>
-  </b-tab>
-  <b-tab>
-  <b-col class="privacy-2">
-  <p>
-  <span class="section-title">
-  IFFF Privacy Portal
-  </span>
-  </p>
-  <br />
-  <p>
-  ▸The IFFF Privacy Portal is the central location for privacy settings and will allow members
-  and customers to manage communication preferences and view the Policies and Terms & Conditions
-  that have been consented to.
-  </p>
-  <br/>
-  <p>
-  ▸IFFF Members, Society Affiliates and Standards Association Members access the <a href="#">Privacy Portal</a>
-  or <a href="#">My Account</a> on <a href="#">www.IFFF.org</a>
-  </p>
-  <br  />
-  <p>
-  ▸Users without an IFFF Web Account can access the <a href="#" @click="portalJump">Privacy Portal</a>
-  and enter their email address to view selected preferences and policies.
-  </p>
-  </b-col>
-  </b-tab>
-
-  <b-tab>
-  <b-col class="privacy-2">
-  <p>
-  <span class="section-title">
-  Communication Preferences Help
-  </span>
-  </p>
-  <p>
-  To access your preferences, please enter your email address and submit.
-  </p>
-  Email Address
-  <ui-input></ui-input>
-  </b-col>
-  </b-tab>
-  </b-tabs>
-  `
-}
 
 var app = new Vue({
   el: '#app',
@@ -307,7 +499,7 @@ var app = new Vue({
   methods:{
     next(){
       this.step+=1;
-    }
+    },
   },
   computed:{
     portal(){
