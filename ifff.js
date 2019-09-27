@@ -226,8 +226,8 @@ var Downloadpdf={
       this.$emit("accept");
       this.$bvModal.hide(this.id)
     },
-    end(){
-      this.$emit("end")
+    finishChall(){
+      this.$emit("finishChall")
     }
   },
   template:`
@@ -242,7 +242,7 @@ var Downloadpdf={
   </template>
   <template v-else>
     <p>Accès à l'article, cliquez ici pour terminer le challenge</p>
-    <ui-button class="mt-2" variant="outline-primary" block @clicked="end">Terminer</ui-button>
+    <ui-button class="mt-2" variant="outline-primary" block @clicked="finishChall">Terminer</ui-button>
   </template>
   </b-modal>
   `
@@ -261,6 +261,9 @@ var PaperPart={
   methods:{
     showArticle(){
       this.$bvModal.hide(this.dlModal)
+    },
+    finishChall(){
+      this.$emit("finishChall")
     },
     downloadPDF(){
       console.log("DownloadPDF")
@@ -367,7 +370,7 @@ var PaperPart={
       </b-col>
     </b-row>
 
-    <downloadpdf :id="dlModal" @mail_typed="showArticle"></downloadpdf>
+    <downloadpdf @finishChall="finishChall" :id="dlModal" @mail_typed="showArticle"></downloadpdf>
   </b-col>
   `
 }
@@ -397,6 +400,9 @@ var SciencePortal={
       console.log("Ask for managing settings")
       this.$emit("managePrivacy")
       this.step=2;
+    },
+    finishChall(){
+      this.$emit("finishChall")
     },
     accept(){
       console.log("Accept")
@@ -477,7 +483,7 @@ var SciencePortal={
 
   <b-row align-h="center" v-if="!privacy">
   <b-col cols="8">
-  <paper-part >
+  <paper-part @finishChall="finishChall">
   </paper-part>
   </b-col>
   <b-col cols="2">
@@ -594,7 +600,7 @@ var app = new Vue({
   <b-row class="step" align-h="center" align-v="center">
   <b-col>
   <science-portal @openPrivacy="trapNotify('interested in',20)"  @enterPrivacy="trapNotify('really interested in', 30)"
-  @managePrivacy="trapNotify('privacy boss', 40)" :active="portal"></science-portal>
+  @managePrivacy="trapNotify('privacy boss', 40)" @finishChall="finishChall" :active="portal"></science-portal>
   </b-col>
   </b-row>
   </b-tab>
