@@ -1,0 +1,32 @@
+{
+	"abstract":"Orchestrating network and computing resources in Mobile Edge Computing (MEC) is an important item in the networking research agenda. In this paper, we propose a novel algorithmic approach to solve the problem of dynamically assigning base stations to MEC facilities, while taking into consideration multiple time-periods, and computing load switching and access latency costs. In particular, leveraging on an existing state of the art on mobile data analytics, we propose a methodology to integrate arbitrary time-period aggregation methods into a network optimization framework. We notably apply simple consecutive time period aggregation and agglomerative hierarchical clustering. Even if the aggregation and optimization methods represent techniques which are different in nature, and whose aim is partially overlapping, we show that they can be integrated in an efficient way. By simulation on real mobile cellular datasets, we show that, thanks to the clustering, we can scale with the number of time-periods considered, that our approach largely outperforms the case without time-period aggregations in terms of MEC access latency, and at which extent the use of clustering and time aggregation affects computing time and solution quality.",
+	"published_in":"2018 IFIP Networking Conference (IFIP Networking) and Workshops",
+	"date_conf":"14-16 May 2018",
+	"date_added_ifff":"25 April 2019",
+	"ISBN_info":{
+		"Electronic_ISBN": "978-3-903176-08-9",
+		"Pod_ISBN": "978-1-5386-6280-9"
+	},
+	"INSPEC_Accession_Number":"18619060",
+	"DOI":"10.23919/IFIPNetworking.2018.8696508",
+	"Publisher": "IEEE",
+	"Conference_Loc": "Zurich, Switzerland, Switzerland",
+	"name":"Prescriptive Analytics for MEC Orchestration",
+        "publisher":"IFFF",
+        "authors":[
+          "Alberto Ceselli",
+          "Marco Fiore",
+          "Angelo Furno",
+          "Marco Premoli",
+          "Stefano Secci",
+          "Razvan Stanica "
+        ],
+	"sections":[
+		"Introduction",
+		"Background",
+		"MEC network orchestration model",
+		"Resolution Algorithm",
+		"Simulation results"
+	]
+}
+	

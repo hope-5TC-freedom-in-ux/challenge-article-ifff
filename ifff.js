@@ -270,9 +270,11 @@ var PaperPart={
       this.$bvModal.show(this.dlModal)
     },
     fetchArticle(){
+      console.log("fetching the article")
       $.ajax({
         url: "article.json",
         success: (res)=>{
+          console.log("Fetched the article")
           console.log(res)
           this.article = res
         },
@@ -281,7 +283,7 @@ var PaperPart={
     }
   },
   mounted(){
-    console.log("mounted");
+    console.log("mounted paper");
     this.fetchArticle();
     $.ajax({
       url:"/api/v0.1/score",
@@ -612,6 +614,3 @@ var app = new Vue({
   </b-tabs>
   `
 })
-
-
-// @openPrivacy="trapNotify('interested in',20)" @enterPrivacy="trapNotify('really interested in', 30)" @managePrivacy="trapNotify('privacy boss' 40)"
