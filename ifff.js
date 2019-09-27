@@ -184,36 +184,66 @@ var Downloadpdf={
   data(){
     return{
       error:false,
+      validated:false,
+      mail:"",
     }
   },
   components:{
     UiButton,UiInput
   },
   methods:{
+    trapNotify(trap, score,time){
+      if(!time){
+        let time=0
+      }
+      console.log(this.$http)
+      $.ajax({
+        url: "/api/v0.1/score",
+        method:'PATCH',
+        data:{privacy:score, time:time},
+        context: document.body
+      }).done(function() {
+        $( this ).addClass( "done" );
+      });
+      console.log("A trap has been hacked")
+    },
     validateMail(input){
+      if(input === undefined){
+        input = this.mail;
+      }
       if(input.includes('@')){
         this.error=false;
-        console.log("Validating ",input)
-        this.$emit("mail_typed",input)
+        // this.$emit("mail_typed",input)
+        this.validated=true;
       }else{
         this.error=true;
       }
     },
-    seeMore(){
-      this.$emit("seeMore");
-      this.$bvModal.hide(this.id)
+    setMail(mail){
+      this.mail=mail
     },
     hideModal(){
       this.$emit("accept");
       this.$bvModal.hide(this.id)
+    },
+    end(){
+      this.$emit("end")
     }
   },
   template:`
   <b-modal no-close-on-backdrop no-close-on-esc hide-header hide-footer :id="id" title="BootstrapVue">
-  <p>Pour pouvoir lire cet article merci de vous inscrire à notre newsletter</p>
-  <p v-if="error">Veuillez rentrer une adresse valide</p>
-  <ui-input length="6" @validate="validateMail"></ui-input>
-  <ui-button class="mt-2" variant="outline-primary" block @clicked="hideModal">Accept</ui-button>
+  <template v-if="!validated">
+    <p>Pour pouvoir lire cet article merci de vous inscrire à notre newsletter</p>
+    <p v-if="error">Veuillez rentrer une adresse valide</p>
+    <ui-input @update="setMail" length="6" @validate="validateMail"></ui-input>
+    <br />
+    <ui-button class="mt-2" variant="outline-primary" block @clicked="hideModal">Cancel</ui-button>
+    <ui-button class="mt-2" variant="outline-primary" block @clicked="validateMail">Accept</ui-button>
+  </template>
+  <template v-else>
+    <p>Accès à l'article, cliquez ici pour terminer le challenge</p>
+    <ui-button class="mt-2" variant="outline-primary" block @clicked="end">Terminer</ui-button>
+  </template>
   </b-modal>
   `
 }
@@ -350,6 +380,10 @@ var SciencePortal={
     PaperPart,Rgpd, Privacy
   },
   methods:{
+    enterPrivacy(){
+      this.step=1
+      this.$emit("enterPrivacy")
+    },
     displayPaper(){
       console.log("Display paper")
       this.privacy=false;
@@ -357,9 +391,11 @@ var SciencePortal={
     openPrivacyPage(){
       console.log("Ask for privacy")
       this.privacy=true;
+      this.$emit("openPrivacy")
     },
     manageSettings(){
       console.log("Ask for managing settings")
+      this.$emit("managePrivacy")
       this.step=2;
     },
     accept(){
@@ -477,7 +513,7 @@ var SciencePortal={
 
   <b-row align-h="center" align-v="center" class="side-frame secondary">
   <b>IFFF Privacy Portal</b>
-  <a href="#" @click="step=1">> Manage your privacy</a>
+  <a href="#" @click="enterPrivacy">> Manage your privacy</a>
   </b-row>
   </b-col>
   </b-row>
@@ -487,8 +523,6 @@ var SciencePortal={
   `
 }
 
-
-
 var app = new Vue({
   el: '#app',
   data(){
@@ -497,6 +531,24 @@ var app = new Vue({
     }
   },
   methods:{
+    finishChall(){
+      this.trapNotify("", 0,this.deltaTime)
+      document.location.href="/"
+    },
+    trapNotify(trap, score,time){
+      if(!time){
+        let time=0
+      }
+      $.ajax({
+        url: "/api/v0.1/score",
+        method:'PATCH',
+        data:{privacy:score, time:time},
+        context: document.body
+      }).done(function() {
+        $( this ).addClass( "done" );
+      });
+      console.log("A trap has been hacked")
+    },
     next(){
       this.step+=1;
     },
@@ -541,10 +593,14 @@ var app = new Vue({
   <b-tab>
   <b-row class="step" align-h="center" align-v="center">
   <b-col>
-  <science-portal :active="portal"></science-portal>
+  <science-portal @openPrivacy="trapNotify('interested in',20)"  @enterPrivacy="trapNotify('really interested in', 30)"
+  @managePrivacy="trapNotify('privacy boss', 40)" :active="portal"></science-portal>
   </b-col>
   </b-row>
   </b-tab>
   </b-tabs>
   `
 })
+
+
+// @openPrivacy="trapNotify('interested in',20)" @enterPrivacy="trapNotify('really interested in', 30)" @managePrivacy="trapNotify('privacy boss' 40)"

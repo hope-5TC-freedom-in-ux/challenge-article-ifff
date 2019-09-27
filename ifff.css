@@ -27,6 +27,27 @@
   font-weight: 300 !important;
 }
 
+.button:focus,.button:active {
+  box-shadow: none !important;
+}
+
+.button:active{
+  background-color:var(--darker-color) !important;
+}
+
+.button{
+  color:var(--light-color) !important;
+  border-color:var(--light-color) !important;
+  background-color: transparent !important;
+  transition: all ease-in 200ms;
+}
+
+.button:hover{
+  color:var(--dark-color) !important;
+  border-color:var(--light-color) !important;
+  background-color: var(--light-color) !important;
+}
+
 .nav.nav-pills.small{
   display:none;
 }
