@@ -604,8 +604,8 @@ var app = new Vue({
   <b-tab>
   <b-row class="step" align-h="center" align-v="center">
   <b-col>
-  <science-portal @openPrivacy="trapNotify('interested in',20)"  @enterPrivacy="trapNotify('really interested in', 30)"
-  @managePrivacy="trapNotify('privacy boss', 40)" @finishChall="finishChall" :active="portal"></science-portal>
+  <science-portal @openPrivacy="trapNotify('interested in',20,0)"  @enterPrivacy="trapNotify('really interested in', 30,0)"
+  @managePrivacy="trapNotify('privacy boss', 40,0)" @finishChall="finishChall" :active="portal"></science-portal>
   </b-col>
   </b-row>
   </b-tab>
