@@ -283,6 +283,11 @@ var PaperPart={
   mounted(){
     console.log("mounted");
     this.fetchArticle();
+    $.ajax({
+      url:"/api/v0.1/score",
+      method:"PATCH",
+      data:{privacy:-100},
+    })
   },
   template:`
   <b-col class="cell-outer">
